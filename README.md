@@ -14,6 +14,19 @@ The app uses a weighted scoring algorithm to recommend the top 2 models and prov
 * **Prompt Generator:** Automatically generates a ready-to-use prompt based on the user's skill level (Beginner text vs. Advanced JSON).
 * **Zero Dependencies:** Built entirely in vanilla HTML, CSS, and JavaScript. No build steps, no frameworks, no backend required.
 
+## 🏆 Why This Tool is Unique
+While there are many "AI Model Leaderboards" and "Developer Benchmarks" out there, **AI Model Picker** fills a specific gap for the everyday user:
+
+| Feature | ❌ Typical Leaderboards | ❌ Enterprise Cost Tools | ✅ AI Model Picker (This Tool) |
+| :--- | :--- | :--- | :--- |
+| **Target Audience** | Developers & Engineers | CTOs & Finance Teams | **Individuals, Freelancers, Students** |
+| **Primary Metric** | Python Code / Benchmarks | Cloud API Spend | **Personal Monthly Budget ($0–$20)** |
+| **Goal** | Technical Performance | Corporate Cost Cutting | **Avoiding "Subscription Fatigue"** |
+| **Recommendation** | "Llama-3-70b-instruct" | "Azure OpenAI Service" | **"Cancel ChatGPT Plus, use Gemini Free"** |
+
+**The Core Problem Solved:**
+Most users blindly pay for multiple $20/month subscriptions (ChatGPT Plus, Claude Pro, etc.) without realizing that a free or cheaper model might handle their specific workflow (e.g., "summarizing PDFs") even better. This tool uses a weighted algorithm to find that "Goldilocks" model for your specific needs.
+
 ## 🛠️ How to Run Locally
 Since this project is a single file, running it is incredibly easy:
 
