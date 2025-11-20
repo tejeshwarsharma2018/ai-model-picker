@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Model Picker - Find the Right Model</title>
+    <style>
+        /* --- CSS VARIABLES & RESET --- */
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #1e293b;
+            --text-light: #64748b;
+            --border: #e2e8f0;
+            --success: #10b981;
+            --warning-bg: #fff7ed;
+            --warning-text: #9a3412;
+            --radius: 12px;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg);
+            color: var(--text-main);
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* --- LAYOUT CONTAINER --- */
+        .container {
+            width: 100%;
+            max-width: 700px;
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 40px;
+        }
+
+        /* --- HEADER --- */
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+        }
+
+        header h1 { margin: 0 0 10px 0; font-size: 2rem; letter-spacing: -0.5px; }
+        header h2 { margin: 0 0 15px 0; font-size: 1.1rem; font-weight: 400; opacity: 0.95; line-height: 1.4; }
+        
+        .header-subtitle {
+            font-size: 0.9rem; 
+            opacity: 0.9; 
+            max-width: 500px; 
+            margin: 10px auto 15px auto;
+            line-height: 1.5;
+        }
+
+        .audience-tag {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin-top: 10px;
+        }
+
+        /* --- PROGRESS BAR --- */
+        .progress-container { width: 100%; height: 6px; background: var(--border); }
+        .progress-fill { height: 100%; background: var(--success); width: 0%; transition: width 0.3s ease; }
+
+        /* --- WIZARD CONTENT --- */
+        .wizard-content { padding: 30px; }
+        .question-step { display: none; animation: fadeIn 0.4s ease; }
+        .question-step.active { display: block; }
+        
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        h3.q-title { font-size: 1.4rem; margin-top: 0; margin-bottom: 25px; color: var(--text-main); }
+
+        /* --- OPTIONS GRID --- */
+        .options-grid { display: grid; gap: 12px; }
+        
+        /* Option Card Styling */
+        .option-card {
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            padding: 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            position: relative;
+            user-select: none; 
+        }
+        .option-card:hover { border-color: var(--primary); background: #eff6ff; }
+        .option-card.selected { border-color: var(--primary); background: #eff6ff; font-weight: 600; }
+        
+        .option-card input { 
+            accent-color: var(--primary); 
+            transform: scale(1.2); 
+            cursor: pointer; 
+            pointer-events: none; /* JS handles click on parent */
+        }
+
+        /* --- BUTTONS --- */
+        .nav-buttons { display: flex; justify-content: space-between; margin-top: 30px; padding-top: 20px; border-top: 1px solid var(--border); }
+        
+        button.btn-primary {
+            background: var(--primary); color: white; border: none; padding: 12px 24px;
+            border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 1rem;
+            transition: background 0.2s;
+        }
+        button.btn-primary:hover { background: var(--primary-dark); }
+        
+        button.btn-secondary {
+            background: transparent; color: var(--text-light); border: 1px solid var(--border);
+            padding: 12px 24px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 1rem;
+        }
+        button.btn-secondary:hover { background: var(--bg); color: var(--text-main); }
+        button:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        /* --- RESULTS VIEW --- */
+        .results-view { display: none; padding: 30px; background: #f1f5f9; }
+        
+        .conflict-banner {
+            background: var(--warning-bg);
+            border: 1px solid #fdba74;
+            border-left: 5px solid var(--warning-text);
+            color: #7c2d12;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 25px;
+            font-size: 0.95rem;
+            display: none;
+            gap: 10px;
+            align-items: start;
+        }
+
+        .model-card {
+            background: white;
+            border-radius: var(--radius);
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            border: 1px solid var(--border);
+        }
+
+        /* Logo & Header */
+        .model-header { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 15px; }
+        .logo-circle {
+            width: 48px; height: 48px; border-radius: 50%;
+            background: var(--text-main); color: white;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: bold; font-size: 1.2rem;
+        }
+        .model-name-group h2 { margin: 0; font-size: 1.4rem; }
+        .model-badge {
+            font-size: 0.75rem; text-transform: uppercase; font-weight: bold;
+            padding: 4px 8px; border-radius: 4px; margin-top: 4px; display: inline-block;
+        }
+        .badge-premium { background: #e0e7ff; color: #3730a3; }
+        .badge-free { background: #dcfce7; color: #166534; }
+        .badge-value { background: #fef3c7; color: #92400e; }
+
+        /* Card Content */
+        .info-row { margin-bottom: 12px; display: flex; gap: 10px; }
+        .info-label { font-weight: 700; min-width: 90px; color: var(--text-light); font-size: 0.9rem; }
+        .info-text { color: var(--text-main); font-size: 0.95rem; }
+        .tradeoff-text { color: #b91c1c; font-size: 0.9rem; }
+        
+        /* Web Note */
+        .web-note { 
+            display: inline-flex; align-items: center; gap: 5px;
+            background: #f0fdf4; color: #15803d; border: 1px solid #bbf7d0;
+            padding: 4px 8px; border-radius: 4px; font-size: 0.85rem; font-weight: 600; margin-top: 5px;
+        }
+
+        /* Prompt Box */
+        .prompt-section { background: #f8fafc; padding: 15px; border-radius: 8px; border: 1px solid var(--border); margin-top: 15px; }
+        .prompt-code {
+            font-family: "Courier New", monospace; font-size: 0.9rem; white-space: pre-wrap;
+            color: #334155; max-height: 250px; overflow-y: auto; display: block;
+        }
+        .btn-copy {
+            background: var(--text-main); color: white; border: none; padding: 8px 16px;
+            border-radius: 6px; font-size: 0.85rem; margin-top: 10px; cursor: pointer;
+        }
+
+        /* Tips Accordion */
+        .accordion { margin-top: 15px; }
+        .accordion-btn {
+            background: none; border: none; color: var(--primary); font-weight: 600;
+            cursor: pointer; padding: 0; font-size: 0.9rem; text-align: left;
+            display: flex; align-items: center; gap: 5px;
+        }
+        .accordion-content {
+            display: none; margin-top: 10px; padding: 15px;
+            background: #fffbeb; border-radius: 6px; font-size: 0.9rem; color: #92400e;
+        }
+        
+        /* Calculation Explanation */
+        .calc-explanation {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
+            font-size: 0.85rem;
+            color: var(--text-light);
+            text-align: center;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Footer */
+        .app-footer {
+            text-align: center; color: var(--text-light); font-size: 0.85rem;
+            margin-top: 20px; padding-bottom: 40px; max-width: 600px;
+        }
+        .feedback-btn {
+            color: var(--primary); text-decoration: underline; background: none; border: none;
+            cursor: pointer; font-size: 0.85rem; padding: 0;
+        }
+
+        /* Mobile tweaks */
+        @media (max-width: 500px) {
+            .container { border-radius: 0; box-shadow: none; }
+            header { padding: 25px 20px; }
+            .nav-buttons { position: sticky; bottom: 0; background: white; padding: 15px 20px; margin-top: 20px; border-top: 1px solid #e2e8f0; z-index: 10; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>AI Model Picker</h1>
+        <h2>Find the Right AI Model for Your Task</h2>
+        <p class="header-subtitle">
+            A simple decision assistant to help anyone choose the right AI model 
+            — based on task type, budget, complexity, and input formats.
+        </p>
+        <span class="audience-tag">Perfect for professionals & small teams</span>
+    </header>
+    
+    <div class="progress-container"><div class="progress-fill" id="progressFill"></div></div>
+
+    <div class="wizard-content" id="wizardContent">
+        </div>
+
+    <div class="results-view" id="resultsView">
+        <div id="conflictMessage" class="conflict-banner">
+            <div style="font-size:1.2rem;">⚠️</div>
+            <div id="conflictText"></div>
+        </div>
+        
+        <div id="resultsContainer"></div>
+        
+        <div class="calc-explanation">
+            These recommendations are generated using a weighted scoring system 
+            based on your answers: task type, complexity, budget, input formats, 
+            and whether you need live web access.
+        </div>
+        
+        <div style="text-align: center; margin-top: 20px;">
+            <button onclick="location.reload()" class="btn-secondary">Start Over</button>
+        </div>
+    </div>
+</div>
+
+<div class="app-footer">
+    <p>Updated: January 2025. This tool suggests models based on general public benchmarks. Always verify results manually.</p>
+    <p>Was this recommendation helpful? <a href="mailto:tejeshwar.19842009@gmail.com?subject=Pick Your AI Feedback" class="feedback-btn">Send Feedback</a></p>
+</div>
+
+<script>
+/* =========================================
+   1. CONFIG: MODEL DATA
+   ========================================= */
+const MODELS = [
+  // --- PREMIUM ---
+  {
+    id: "gpt-4.1",
+    label: "GPT-4.1 (OpenAI)",
+    tier: "premium",
+    cost_desc: "High Cost / Subscription",
+    trade_off: "Most expensive model on the list.",
+    notes: "The state-of-the-art for complex reasoning and coding.",
+    capabilities: { reasoning: 5, speed: 3, web_native: false, multimodal: true, coding: 5, long_context: 4 },
+    self_host: false
+  },
+  {
+    id: "claude-3.7-sonnet",
+    label: "Claude 3.7 Sonnet (Anthropic)",
+    tier: "premium",
+    cost_desc: "Paid Subscription",
+    trade_off: "Strict safety refusals can be annoying.",
+    notes: "Best-in-class natural writing and large document analysis.",
+    capabilities: { reasoning: 5, speed: 3, web_native: false, multimodal: true, coding: 5, long_context: 5 },
+    self_host: false
+  },
+  {
+    id: "gemini-2.5-pro",
+    label: "Gemini 2.5 Pro (Google)",
+    tier: "premium",
+    cost_desc: "Paid / Free Tier available",
+    trade_off: "Occasional hallucination on web data.",
+    notes: "Strong multimodal skills; integrates deeply with Google Workspace.",
+    capabilities: { reasoning: 4, speed: 3, web_native: true, multimodal: 5, coding: 4, long_context: 5 },
+    self_host: false
+  },
+  // --- LOW / VALUE ---
+  {
+    id: "gpt-4.1-mini",
+    label: "GPT-4.1 mini (OpenAI)",
+    tier: "low",
+    cost_desc: "Low Cost API",
+    trade_off: "Lower reasoning depth than full 4.1.",
+    notes: "Excellent balance of intelligence and speed.",
+    capabilities: { reasoning: 4, speed: 5, web_native: false, multimodal: true, coding: 4, long_context: 4 }, // FIXED: multimodal true
+    self_host: false
+  },
+  {
+    id: "claude-3.7-haiku",
+    label: "Claude 3.7 Haiku (Anthropic)",
+    tier: "low",
+    cost_desc: "Very Low Cost",
+    trade_off: "Not suitable for complex math or heavy logic.",
+    notes: "Blazing fast; perfect for simple tasks and summaries.",
+    capabilities: { reasoning: 3, speed: 5, web_native: false, multimodal: true, coding: 3, long_context: 4 }, // FIXED: multimodal true
+    self_host: false
+  },
+  {
+    id: "deepseek-r1",
+    label: "DeepSeek-R1",
+    tier: "low",
+    cost_desc: "Low Cost API",
+    trade_off: "Specialized for logic; weaker at creative writing.",
+    notes: "Excellent performance-to-price ratio for math and coding.",
+    capabilities: { reasoning: 5, speed: 3, web_native: false, multimodal: 2, coding: 5, long_context: 3 },
+    self_host: false
+  },
+  // --- FREE / VERY CHEAP ---
+  {
+    id: "gemini-flash-lite",
+    label: "Gemini Flash Lite (Google)",
+    tier: "free",
+    cost_desc: "Free Tier / Micro Cost",
+    trade_off: "Least capable reasoning on this list.",
+    notes: "Extremely fast; great for high-volume simple tasks.",
+    capabilities: { reasoning: 2, speed: 5, web_native: true, multimodal: 3, coding: 2, long_context: 3 },
+    self_host: false
+  },
+  {
+    id: "gemini-2.5-flash",
+    label: "Gemini 2.5 Flash (Google)",
+    tier: "free",
+    cost_desc: "Free Tier / Very Low Cost",
+    trade_off: "Lower complexity handling than Pro.",
+    notes: "Great for live web lookups and simple tasks.",
+    capabilities: { reasoning: 3, speed: 5, web_native: true, multimodal: 4, coding: 3, long_context: 4 },
+    self_host: false
+  },
+  // --- OPEN SOURCE ---
+  {
+    id: "qwen-2.5",
+    label: "Qwen 2.5 (Alibaba)",
+    tier: "free",
+    cost_desc: "Open Source",
+    trade_off: "Requires hosting; variable English nuance.",
+    notes: "A powerhouse for coding and math in the open-source world.",
+    capabilities: { reasoning: 4, speed: 4, web_native: false, multimodal: 2, coding: 5, long_context: 4 },
+    self_host: true
+  },
+  {
+    id: "mistral-8x22b",
+    label: "Mistral 8x22B",
+    tier: "free",
+    cost_desc: "Open Source",
+    trade_off: "Heavy hardware requirements to run locally.",
+    notes: "Strong European open model with good reasoning.",
+    capabilities: { reasoning: 4, speed: 3, web_native: false, multimodal: false, coding: 4, long_context: 4 },
+    self_host: true
+  },
+  {
+    id: "llama-3",
+    label: "Llama 3 (Meta)",
+    tier: "free",
+    cost_desc: "Open Source",
+    trade_off: "Limited context window compared to Claude.",
+    notes: "The standard for open-weight general purpose models.",
+    capabilities: { reasoning: 3, speed: 4, web_native: false, multimodal: 2, coding: 3, long_context: 3 },
+    self_host: true
+  }
+];
+
+/* =========================================
+   2. CONFIG: QUESTIONS
+   ========================================= */
+const QUESTIONS = [
+    {
+        id: "task_type",
+        text: "What do you want to do?",
+        type: "single",
+        options: [
+            { val: "write_rewrite", label: "Write or rewrite text (Email, Blog, Essay)" },
+            { val: "research", label: "Research & Fact-checking" },
+            { val: "analyze_docs", label: "Summarize long documents / PDFs" },
+            { val: "brainstorm_creative", label: "Brainstorm creative ideas" },
+            { val: "code_debug", label: "Write or Fix Code" },
+            { val: "images_media", label: "Analyze Images or Media" },
+            { val: "data_tables", label: "Analyze Data / Tables" }
+        ]
+    },
+    {
+        id: "priority",
+        text: "What is most important for this result?",
+        type: "single",
+        options: [
+            { val: "accuracy", label: "Accuracy (I need facts/logic)" },
+            { val: "speed_cost", label: "Speed (I need it fast/cheap)" },
+            { val: "creativity", label: "Creativity (Surprise me)" },
+            { val: "tone_polish", label: "Human-like Tone (Polished writing)" }
+        ]
+    },
+    {
+        id: "need_live_web",
+        text: "Do you need fresh information from the internet?", // FIXED: UX wording
+        type: "single",
+        options: [
+            { val: "yes", label: "Yes, I need breaking news / recent info" },
+            { val: "no", label: "No, general knowledge is fine" }
+        ]
+    },
+    {
+        id: "complexity",
+        text: "How complex is this task?",
+        type: "single",
+        options: [
+            { val: "simple", label: "Simple (A quick question or paragraph)" },
+            { val: "medium", label: "Medium (A few steps involved)" },
+            { val: "complex", label: "Complex (Deep strategy, math, or logic)" }
+        ]
+    },
+    {
+        id: "input_types",
+        text: "What will you give the AI to work with?",
+        type: "multi",
+        options: [
+            { val: "none", label: "None (Just text instructions)" },
+            { val: "long_docs", label: "Long Documents / PDFs" },
+            { val: "code", label: "Code Files" },
+            { val: "tables_data", label: "Excel / CSV Data" },
+            { val: "images", label: "Images / Screenshots" }
+        ]
+    },
+    {
+        id: "constraints",
+        text: "Do you have budget constraints?",
+        type: "single",
+        options: [
+            { val: "no_special_constraint", label: "No specific constraints" },
+            { val: "must_be_free_or_cheap", label: "Must be Free or Very Cheap" },
+            { val: "prefer_open_source_self_host", label: "Prefer Open Source / Private" }
+        ]
+    }
+];
+
+/* =========================================
+   3. APP STATE & LOGIC
+   ========================================= */
+let currentStep = 0;
+let userAnswers = {}; 
+
+function init() { renderQuestion(); }
+
+function renderQuestion() {
+    const q = QUESTIONS[currentStep];
+    const container = document.getElementById('wizardContent');
+    const progress = document.getElementById('progressFill');
+    
+    // Progress
+    progress.style.width = ((currentStep + 1) / QUESTIONS.length) * 100 + "%";
+
+    let html = `
+        <div class="question-step active">
+            <h3 class="q-title">${q.text}</h3>
+            <div class="options-grid">
+    `;
+
+    q.options.forEach(opt => {
+        let isChecked = false;
+        if (userAnswers[q.id]) {
+            if (Array.isArray(userAnswers[q.id])) isChecked = userAnswers[q.id].includes(opt.val);
+            else isChecked = userAnswers[q.id] === opt.val;
+        }
+        const inputType = q.type === 'single' ? 'radio' : 'checkbox';
+        
+        // Safe Click Handler
+        html += `
+            <label class="option-card ${isChecked ? 'selected' : ''}" onclick="handleSelection(this, '${inputType}', '${q.id}', '${opt.val}')">
+                <input type="${inputType}" name="${q.id}" value="${opt.val}" ${isChecked ? 'checked' : ''}>
+                <span>${opt.label}</span>
+            </label>
+        `;
+    });
+
+    const isLast = currentStep === QUESTIONS.length - 1;
+    html += `
+            </div>
+            <div class="nav-buttons">
+                <button class="btn-secondary" onclick="prevStep()" ${currentStep === 0 ? 'disabled' : ''}>Back</button>
+                <button class="btn-primary" onclick="nextStep()">${isLast ? 'Get My Recommendation' : 'Next'}</button>
+            </div>
+        </div>
+    `;
+    container.innerHTML = html;
+}
+
+function handleSelection(card, type, questionId, value) {
+    const input = card.querySelector('input');
+    const optionsGrid = card.parentElement;
+    const allInputs = optionsGrid.querySelectorAll('input');
+
+    if (type === 'radio') {
+        allInputs.forEach(i => {
+            i.checked = false;
+            i.parentElement.classList.remove('selected');
+        });
+        input.checked = true;
+        card.classList.add('selected');
+        return;
+    }
+
+    // Checkbox Logic
+    const newState = !input.checked;
+    input.checked = newState;
+
+    if (newState) {
+        card.classList.add('selected');
+        // Mutual Exclusivity for Input Types
+        if (questionId === 'input_types') {
+            if (value === 'none') {
+                allInputs.forEach(other => {
+                    if (other !== input) {
+                        other.checked = false;
+                        other.parentElement.classList.remove('selected');
+                    }
+                });
+            } else {
+                allInputs.forEach(other => {
+                    if (other.value === 'none') {
+                        other.checked = false;
+                        other.parentElement.classList.remove('selected');
+                    }
+                });
+            }
+        }
+    } else {
+        card.classList.remove('selected');
+    }
+}
+
+function nextStep() {
+    const q = QUESTIONS[currentStep];
+    const inputs = document.querySelectorAll(`input[name="${q.id}"]:checked`);
+    if (inputs.length === 0) { alert("Please select an option."); return; }
+
+    if (q.type === 'single') userAnswers[q.id] = inputs[0].value;
+    else userAnswers[q.id] = Array.from(inputs).map(i => i.value);
+
+    if (currentStep < QUESTIONS.length - 1) {
+        currentStep++;
+        renderQuestion();
+    } else {
+        calculateResults();
+    }
+}
+
+function prevStep() {
+    if (currentStep > 0) { currentStep--; renderQuestion(); }
+}
+
+/* =========================================
+   4. SCORING ENGINE
+   ========================================= */
+function calculateResults() {
+    let scoredModels = MODELS.map(m => ({ ...m, score: 0, match_reasons: [] }));
+    const ans = userAnswers;
+
+    const addScore = (id, pts, reason) => {
+        const m = scoredModels.find(x => x.id === id);
+        if (m) { 
+            m.score += pts; 
+            if(reason) m.match_reasons.push({text: reason, points: pts}); 
+        }
+    };
+
+    // --- RULE A: TASK TYPE ---
+    if (ans.task_type === 'write_rewrite') {
+        addScore('claude-3.7-sonnet', 3, "Best-in-class natural writing");
+        addScore('gpt-4.1', 2, "Top-tier drafting");
+        addScore('gpt-4.1-mini', 1, "Good for simple drafts");
+        addScore('claude-3.7-haiku', 1, "Fast drafts");
+    } else if (ans.task_type === 'research') {
+        addScore('gemini-2.5-pro', 3, "Deep integration with Google Search");
+        addScore('gemini-2.5-flash', 2, "Fast web retrieval");
+        addScore('gemini-flash-lite', 2, "Fast web retrieval");
+        addScore('gpt-4.1', 2, "Strong synthesis");
+    } else if (ans.task_type === 'code_debug') {
+        addScore('gpt-4.1', 3, "Top-tier coding logic");
+        addScore('claude-3.7-sonnet', 3, "Strong coding context");
+        addScore('qwen-2.5', 3, "Open source coding powerhouse");
+        addScore('deepseek-r1', 3, "Math/Logic specialist");
+        
+        // FIXED: Open Source Coding Boost
+        if (ans.constraints === "prefer_open_source_self_host") {
+            addScore("qwen-2.5", 4, "Open-source coding leader");
+            addScore("deepseek-r1", 4, "Strong logic coding ability");
+        }
+
+    } else if (ans.task_type === 'analyze_docs') {
+        addScore('claude-3.7-sonnet', 4, "Huge context window for documents");
+        addScore('gpt-4.1', 2, "Reliable analysis");
+        addScore('gpt-4.1-mini', 2, "Good for summary");
+    } else if (ans.task_type === 'images_media') {
+        // Tier 1 Vision
+        addScore('gemini-2.5-pro', 3, "Native multimodal understanding");
+        addScore('gpt-4.1', 3, "Strong vision capabilities");
+        // Tier 2 Vision (Boosted)
+        addScore('gpt-4.1-mini', 2, "Good lightweight vision model");
+        addScore('claude-3.7-haiku', 2, "Fast multimodal processing");
+        addScore('gemini-2.5-flash', 2, "Great web+image combo");
+        addScore('gemini-flash-lite', 1, "Useful for simple image tasks");
+    } else if (ans.task_type === 'brainstorm_creative') {
+        addScore('gpt-4.1', 3, "High creativity");
+        addScore('gemini-2.5-pro', 3, "Creative versatility");
+    } else if (ans.task_type === 'data_tables') {
+        addScore('gpt-4.1', 3, "Strong structured data handling");
+        addScore('deepseek-r1', 3, "Logic optimized");
+        addScore('qwen-2.5', 2, "Good logical handling");
+    }
+
+    // --- RULE B: PRIORITY ---
+    if (ans.priority === 'speed_cost') {
+        addScore('gemini-flash-lite', 4, "Extremely fast");
+        addScore('claude-3.7-haiku', 4, "Blazing fast");
+        addScore('gemini-2.5-flash', 3, "Very fast");
+        addScore('gpt-4.1-mini', 3, "Responsive");
+        addScore('gpt-4.1', -1);
+        addScore('claude-3.7-sonnet', -1);
+    } else if (ans.priority === 'accuracy') {
+        addScore('gpt-4.1', 3, "State-of-the-art accuracy");
+        addScore('claude-3.7-sonnet', 3, "High reliability");
+        addScore('deepseek-r1', 2, "Logic specialist");
+        addScore('gemini-flash-lite', -2);
+    }
+
+    // --- RULE C: COMPLEXITY ---
+    if (ans.complexity === 'complex') {
+        addScore('gpt-4.1', 3, "Handles complexity well");
+        addScore('claude-3.7-sonnet', 3, "Handles long context");
+        addScore('mistral-8x22b', 2, "Strong reasoning");
+        addScore('gemini-flash-lite', -3);
+        addScore('gpt-4.1-mini', -1);
+    } else if (ans.complexity === 'simple') {
+        addScore('gpt-4.1-mini', 3, "Perfect for simple tasks");
+        addScore('claude-3.7-haiku', 3, "Efficient for simple tasks");
+        addScore('gemini-flash-lite', 3, "Micro cost");
+        
+        // FIXED: Soft penalty for overpowering models
+        addScore("gpt-4.1", -2, "Overkill for simple tasks");
+        addScore("claude-3.7-sonnet", -2, "Overkill for simple tasks");
+    }
+
+    // --- RULE D: WEB NEEDS ---
+    if (ans.need_live_web === 'yes') {
+        scoredModels.forEach(m => {
+            if (m.capabilities.web_native) {
+                addScore(m.id, 2, "Native live web search");
+            } else {
+                addScore(m.id, -1, "Lacks native web search");
+            }
+        });
+    }
+
+    // --- RULE E: INPUTS ---
+    if (ans.input_types.includes('long_docs')) {
+        addScore('claude-3.7-sonnet', 3, "Massive context window");
+        addScore('gemini-2.5-pro', 2, "Large context window");
+    }
+    if (ans.input_types.includes('code')) {
+        addScore('gpt-4.1', 2, "Coding specialist");
+        addScore('qwen-2.5', 2, "Open source coding");
+    }
+    if (ans.input_types.includes('images')) {
+        addScore('gemini-2.5-pro', 3, "Built for images/video");
+        addScore('gpt-4.1', 2, "Vision capable");
+    }
+
+    // --- RULE F: CONSTRAINTS ---
+    if (ans.constraints === 'must_be_free_or_cheap') {
+        scoredModels.forEach(m => {
+            if (m.tier === 'free') {
+                addScore(m.id, 4, "Free tier available");
+            } else if (m.tier === 'low') {
+                addScore(m.id, 2, "Low cost option");
+            } else {
+                addScore(m.id, -2, "Premium pricing");
+            }
+        });
+    }
+
+    if (ans.constraints === 'prefer_open_source_self_host') {
+        scoredModels.forEach(m => {
+            if (m.self_host) {
+                addScore(m.id, 5, "Open source / Self-host");
+            } else {
+                addScore(m.id, -2, "Closed source");
+            }
+        });
+    }
+    
+    // FIXED: Neutralize Cost Penalty if "No Constraints"
+    if (ans.constraints === 'no_special_constraint') {
+        // We do nothing. This ensures premium models are scored purely on capability 
+        // without arbitrary penalties or boosts related to cost.
+    }
+
+    // --- SCALING ---
+    scoredModels.forEach(m => {
+        m.score = Math.round(m.score * 1.5);
+    });
+
+    // Sort
+    scoredModels.sort((a, b) => b.score - a.score);
+
+    // --- THRESHOLD LOGIC ---
+    let finalSelection = [];
+    if (scoredModels.length > 0) {
+        finalSelection.push(scoredModels[0]);
+        
+        if (scoredModels.length > 1) {
+            if (scoredModels[1].score >= (scoredModels[0].score - 3)) {
+                finalSelection.push(scoredModels[1]);
+            }
+        }
+    }
+
+    displayResults(finalSelection);
+}
+
+/* =========================================
+   5. DISPLAY & PROMPTS
+   ========================================= */
+function displayResults(topModels) {
+    document.getElementById('wizardContent').style.display = 'none';
+    document.getElementById('resultsView').style.display = 'block';
+    
+    // --- CONFLICT CHECK ---
+    const isComplex = userAnswers.complexity === 'complex';
+    const isCheap = userAnswers.constraints === 'must_be_free_or_cheap';
+    const hasLongDocs = userAnswers.input_types.includes('long_docs');
+    
+    const conflictEl = document.getElementById('conflictMessage');
+    const conflictText = document.getElementById('conflictText');
+    let alerts = [];
+
+    if (isComplex && isCheap) {
+        alerts.push("<strong>Complexity vs Cost:</strong> You need smart reasoning but want it cheap. We prioritized value, but a Premium model would be smarter.");
+    }
+    if (hasLongDocs && isCheap) {
+        alerts.push("<strong>Context vs Cost:</strong> Free/Cheap models often have smaller memories. Processing long docs might be cut off.");
+    }
+
+    if (alerts.length > 0) {
+        conflictText.innerHTML = alerts.join("<br><br>");
+        conflictEl.style.display = 'flex';
+    } else {
+        conflictEl.style.display = 'none';
+    }
+
+    const container = document.getElementById('resultsContainer');
+    container.innerHTML = '';
+
+    topModels.forEach((m, index) => {
+        let badgeClass = 'badge-value';
+        if (m.tier === 'premium') badgeClass = 'badge-premium';
+        if (m.tier === 'free') badgeClass = 'badge-free';
+
+        // Best Reason Logic
+        let bestReason = "Good general fit for your criteria.";
+        const positives = m.match_reasons.filter(r => r.points > 0);
+        if (positives.length > 0) {
+            positives.sort((a, b) => b.text.length - a.text.length);
+            bestReason = positives[0].text;
+        }
+
+        const promptText = generatePrompt(m);
+        const initial = m.label.charAt(0);
+        
+        let webNoteHtml = '';
+        if (m.capabilities.web_native && userAnswers.need_live_web !== 'no') {
+            webNoteHtml = `<div class="web-note"><span>🌐</span> This model supports live web retrieval.</div>`;
+        }
+
+        const card = document.createElement('div');
+        card.className = 'model-card';
+        card.innerHTML = `
+            <div class="model-header">
+                <div class="logo-circle">${initial}</div>
+                <div class="model-name-group">
+                    <h2>${m.label}</h2>
+                    <span class="model-badge ${badgeClass}">${m.cost_desc}</span>
+                </div>
+                <div style="margin-left:auto; font-weight:bold; color:var(--primary); opacity:0.5;">${m.score} pts</div>
+            </div>
+
+            <div class="info-row">
+                <div class="info-label">Why this fit:</div>
+                <div class="info-text">${bestReason} ${webNoteHtml}</div>
+            </div>
+
+            <div class="info-row">
+                <div class="info-label">Trade-off:</div>
+                <div class="info-text tradeoff-text">${m.trade_off}</div>
+            </div>
+
+            <div class="prompt-section">
+                <div style="font-weight:600; margin-bottom:5px;">Suggested Prompt (${userAnswers.prompt_skill}):</div>
+                <code class="prompt-code" id="prompt-${index}">${promptText}</code>
+                <button class="btn-copy" onclick="copyText('prompt-${index}')">Copy Prompt</button>
+            </div>
+
+            <div class="accordion">
+                <button class="accordion-btn" onclick="toggleAccordion(this)">
+                    <span>▶</span> Show Advanced Tips
+                </button>
+                <div class="accordion-content">
+                    <ul>
+                        <li>If the output is too generic, ask the model to "Avoid clichés".</li>
+                        <li>For complex tasks, ask the model to "Think step-by-step" before answering.</li>
+                        <li><strong>Model Specific:</strong> ${m.notes}</li>
+                    </ul>
+                </div>
+            </div>
+        `;
+        container.appendChild(card);
+    });
+}
+
+function generatePrompt(model) {
+    const task = userAnswers.task_type;
+    const skill = userAnswers.prompt_skill;
+    const complexity = userAnswers.complexity;
+    
+    const wantsWeb = userAnswers.need_live_web === 'yes';
+    const isWebNative = model.capabilities.web_native;
+    
+    let prefix = "";
+    if (wantsWeb) {
+        if (isWebNative) {
+            prefix = "First, search the web for the most recent information on this topic. Then, ";
+        } else {
+            prefix = "[WARNING: This model cannot search the web. Use the text provided below only.]\n\n";
+        }
+    }
+
+    // --- BEGINNER / INTERMEDIATE ---
+    if (skill !== 'advanced') {
+        let base = "";
+        switch(task) {
+            case 'write_rewrite': 
+                base = "Rewrite the text below to be more professional and concise. Improve flow but keep the meaning."; 
+                break;
+            case 'research': 
+                base = `${prefix}Provide a summary of [Topic]. IMPORTANT: Use bullet points and include citations for every claim.`; 
+                break;
+            case 'code_debug': 
+                base = "Review this code. 1. Identify bugs. 2. Explain the fix step-by-step. 3. Add comments to the corrected code."; 
+                break;
+            case 'analyze_docs': 
+                base = "Analyze this document. List the top 5 key takeaways and any risks mentioned."; 
+                break;
+            case 'images_media': 
+                base = "Describe the main subject, lighting, and visual style of this image. Mention any safety concerns if applicable."; 
+                break;
+            case 'data_tables': 
+                base = "Analyze this data. Present the key trends in a bulleted list and identify any outliers."; 
+                break;
+            case 'brainstorm_creative': 
+                base = "Brainstorm 10 unique ideas for [Project]. Format as a numbered list. Think outside the box."; 
+                break;
+            default: 
+                base = "Help me with [Task]. Be clear and concise.";
+        }
+        return base;
+    }
+
+    // --- ADVANCED ---
+    let outputFormat = "Markdown";
+    if (task === 'code_debug') outputFormat = "Clean code block with inline comments and explanation";
+    if (task === 'research') outputFormat = "Annotated summary with citations";
+    if (task === 'brainstorm_creative') outputFormat = "Bulleted idea list";
+    if (task === 'write_rewrite') outputFormat = "Polished paragraph in Markdown";
+
+    let jsonStruct = {
+        role: "Expert Assistant",
+        task: task,
+        context: `${complexity} complexity level`,
+        instructions: [],
+        output_format: outputFormat
+    };
+
+    if (wantsWeb && isWebNative) jsonStruct.instructions.push("Search web for live data");
+    if (wantsWeb && !isWebNative) jsonStruct.instructions.push("WARNING: No live web access; rely on training data");
+
+    if (task === 'write_rewrite') {
+        jsonStruct.instructions.push("Rewrite for clarity", "Maintain original intent");
+    } else if (task === 'research') {
+        jsonStruct.instructions.push("Synthesize sources", "Strict citation requirement");
+    } else if (task === 'code_debug') {
+        jsonStruct.instructions.push("Identify logic errors", "Optimize performance", "Comment fix");
+    }
+
+    return JSON.stringify(jsonStruct, null, 2);
+}
+
+function toggleAccordion(btn) {
+    const content = btn.nextElementSibling;
+    if (content.style.display === 'block') {
+        content.style.display = 'none';
+        btn.querySelector('span').innerText = '▶';
+    } else {
+        content.style.display = 'block';
+        btn.querySelector('span').innerText = '▼';
+    }
+}
+
+function copyText(id) {
+    const text = document.getElementById(id).innerText;
+    navigator.clipboard.writeText(text).then(() => alert("Prompt copied!"));
+}
+
+// Add Prompt Skill Question logic
+QUESTIONS.push({
+    id: "prompt_skill",
+    text: "What is your experience level with AI prompts?",
+    type: "single",
+    options: [
+        { val: "beginner", label: "Beginner (I want a simple sentence)" },
+        { val: "intermediate", label: "Intermediate (I can tweak details)" },
+        { val: "advanced", label: "Advanced (I use structured prompts/JSON)" }
+    ]
+});
+
+// Start App Safely
+document.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>
