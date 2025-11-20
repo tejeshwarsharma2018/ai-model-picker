@@ -2,7 +2,7 @@
 
 A smart, mobile-friendly web tool that helps users choose the best AI model for their specific needs. 
 
-[**Live Demo**](https://tejeshwarsharma2018.github.io/model-picker) ## 🚀 About
+[**Live Demo**](https://tejeshwarsharma2018.github.io/ai-model-picker/) ## 🚀 About
 The **AI Model Picker** is a single-file decision assistant designed for professionals, small teams, and non-technical users. Instead of guessing which model to use (GPT-4, Claude 3.5, Gemini, Llama 3, etc.), users answer 6 simple questions about their task, budget, and complexity.
 
 The app uses a weighted scoring algorithm to recommend the top 2 models and provides a **tailored prompt** to get them started immediately.
