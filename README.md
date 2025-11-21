@@ -22,11 +22,11 @@ While there are many "AI Model Leaderboards" and "Developer Benchmarks" out ther
 | Feature | ❌ Typical Leaderboards | ❌ Enterprise Cost Tools | ✅ AI Model Picker (This Tool) |
 | :--- | :--- | :--- | :--- |
 | **Target Audience** | Developers & Engineers | CTOs & Finance Teams | **Individuals, Freelancers, Students** |
-| **Primary Metric** | Python Code / Benchmarks | Cloud API Spend | **Personal Monthly Budget ($0–$20)** |
+| **Primary Metric** | Python Code / Benchmarks | Cloud API Spend | **Personal Monthly Budget** |
 | **Goal** | Technical Performance | Corporate Cost Cutting | **Avoiding "Subscription Fatigue"** |
 
 **The Core Problem Solved:**
-Most users blindly pay for multiple $20/month subscriptions (ChatGPT Plus, Claude Pro, etc.) without realizing that a free or cheaper model might handle their specific workflow (e.g., "summarizing PDFs") even better. This tool uses a weighted algorithm to find that "Goldilocks" model for your specific needs.
+Most users blindly pay for multiple monthly subscriptions (ChatGPT Plus, Claude Pro, etc.) without realizing that a free or cheaper model might handle their specific workflow (e.g., "summarizing PDFs") even better. This tool uses a weighted algorithm to find that "Goldilocks" model for your specific needs.
 
 ## The "Goldilocks" Engine: Why This Exists
 
