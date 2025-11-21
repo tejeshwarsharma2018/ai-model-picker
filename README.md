@@ -1,6 +1,7 @@
 # AI Model Picker
 
 A smart, mobile-friendly web tool that helps users choose the best AI model for their specific needs. 
+
 Tool link: [AI Model Picker](https://tejeshwarsharma2018.github.io/ai-model-picker/)
 
 ## About
