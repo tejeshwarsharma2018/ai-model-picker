@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI Model Picker - Find the Right Model</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
     <style>
         /* --- CSS VARIABLES & RESET --- */
         :root {
@@ -11,20 +16,23 @@
             --primary-dark: #1d4ed8;
             --bg: #f8fafc;
             --card-bg: #ffffff;
-            --text-main: #1e293b;
+            --text-main: #0f172a; /* Darker for better contrast */
             --text-light: #64748b;
             --border: #e2e8f0;
             --success: #10b981;
             --warning-bg: #fff7ed;
             --warning-text: #9a3412;
-            --radius: 12px;
-            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --money-bg: #ecfdf5;
+            --money-text: #047857;
+            --radius: 16px; /* Softer corners */
+            --shadow-soft: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
+            --shadow-hover: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
         }
 
         * { box-sizing: border-box; }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             background-color: var(--bg);
             color: var(--text-main);
             margin: 0;
@@ -42,175 +50,233 @@
             max-width: 700px;
             background: var(--card-bg);
             border-radius: var(--radius);
-            box-shadow: var(--shadow);
+            box-shadow: var(--shadow-soft);
             overflow: hidden;
             display: flex;
             flex-direction: column;
             margin-bottom: 40px;
         }
 
-        /* --- HEADER --- */
+        /* --- HEADER (Modern Gradient) --- */
         header {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            background: linear-gradient(135deg, #2563eb 0%, #4f46e5 100%);
             color: white;
-            padding: 40px 30px;
+            padding: 50px 30px;
             text-align: center;
         }
 
-        header h1 { margin: 0 0 10px 0; font-size: 2rem; letter-spacing: -0.5px; }
-        header h2 { margin: 0 0 15px 0; font-size: 1.1rem; font-weight: 400; opacity: 0.95; line-height: 1.4; }
+        header h1 { margin: 0 0 10px 0; font-size: 2.2rem; letter-spacing: -0.03em; font-weight: 700; }
+        header h2 { margin: 0 0 15px 0; font-size: 1.1rem; font-weight: 500; opacity: 0.95; line-height: 1.4; }
         
         .header-subtitle {
-            font-size: 0.9rem; 
+            font-size: 0.95rem; 
             opacity: 0.9; 
-            max-width: 500px; 
-            margin: 10px auto 15px auto;
-            line-height: 1.5;
+            max-width: 520px; 
+            margin: 15px auto 20px auto;
+            line-height: 1.6;
         }
 
         .audience-tag {
             display: inline-block;
-            background: rgba(255,255,255,0.2);
-            padding: 4px 12px;
-            border-radius: 20px;
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(5px);
+            padding: 6px 16px;
+            border-radius: 30px;
             font-size: 0.85rem;
-            font-weight: 500;
+            font-weight: 600;
             margin-top: 10px;
+            border: 1px solid rgba(255,255,255,0.2);
         }
 
         /* --- PROGRESS BAR --- */
         .progress-container { width: 100%; height: 6px; background: var(--border); }
-        .progress-fill { height: 100%; background: var(--success); width: 0%; transition: width 0.3s ease; }
+        .progress-fill { height: 100%; background: var(--success); width: 0%; transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
 
         /* --- WIZARD CONTENT --- */
-        .wizard-content { padding: 30px; }
+        .wizard-content { padding: 40px 30px; }
         .question-step { display: none; animation: fadeIn 0.4s ease; }
         .question-step.active { display: block; }
         
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        h3.q-title { font-size: 1.4rem; margin-top: 0; margin-bottom: 25px; color: var(--text-main); }
+        h3.q-title { font-size: 1.5rem; font-weight: 700; margin-top: 0; margin-bottom: 30px; color: var(--text-main); }
 
         /* --- OPTIONS GRID --- */
-        .options-grid { display: grid; gap: 12px; }
+        .options-grid { display: grid; gap: 15px; }
         
-        /* Option Card Styling */
+        /* Modern Option Card Styling */
         .option-card {
-            border: 2px solid var(--border);
-            border-radius: 10px;
-            padding: 16px;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 18px;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.2s ease;
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 15px;
             position: relative;
-            user-select: none; 
+            user-select: none;
+            font-weight: 500;
+            font-size: 1.05rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
         }
-        .option-card:hover { border-color: var(--primary); background: #eff6ff; }
-        .option-card.selected { border-color: var(--primary); background: #eff6ff; font-weight: 600; }
+
+        .option-card:hover { 
+            transform: translateY(-2px); 
+            box-shadow: var(--shadow-hover);
+            border-color: #bfdbfe;
+        }
+
+        .option-card.selected { 
+            border-color: var(--primary); 
+            background: #eff6ff; 
+            box-shadow: 0 0 0 2px var(--primary);
+            font-weight: 600;
+        }
         
         .option-card input { 
             accent-color: var(--primary); 
-            transform: scale(1.2); 
+            transform: scale(1.3); 
             cursor: pointer; 
-            pointer-events: none; /* JS handles click on parent */
+            pointer-events: none; /* Key Fix: JS handles parent click */
         }
 
         /* --- BUTTONS --- */
-        .nav-buttons { display: flex; justify-content: space-between; margin-top: 30px; padding-top: 20px; border-top: 1px solid var(--border); }
+        .nav-buttons { display: flex; justify-content: space-between; margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--border); }
         
+        button { font-family: 'Plus Jakarta Sans', sans-serif; }
+
         button.btn-primary {
-            background: var(--primary); color: white; border: none; padding: 12px 24px;
-            border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 1rem;
-            transition: background 0.2s;
+            background: var(--primary); color: white; border: none; padding: 14px 28px;
+            border-radius: 10px; cursor: pointer; font-weight: 600; font-size: 1rem;
+            transition: background 0.2s, transform 0.1s;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
         }
-        button.btn-primary:hover { background: var(--primary-dark); }
+        button.btn-primary:hover { background: var(--primary-dark); transform: translateY(-1px); }
         
         button.btn-secondary {
             background: transparent; color: var(--text-light); border: 1px solid var(--border);
-            padding: 12px 24px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 1rem;
+            padding: 12px 24px; border-radius: 10px; cursor: pointer; font-weight: 600; font-size: 1rem;
+            transition: all 0.2s;
         }
-        button.btn-secondary:hover { background: var(--bg); color: var(--text-main); }
-        button:disabled { opacity: 0.5; cursor: not-allowed; }
+        button.btn-secondary:hover { background: var(--bg); color: var(--text-main); border-color: var(--text-light); }
+        button:disabled { opacity: 0.5; cursor: not-allowed; box-shadow: none; transform: none; }
 
         /* --- RESULTS VIEW --- */
-        .results-view { display: none; padding: 30px; background: #f1f5f9; }
+        .results-view { display: none; padding: 30px; background: #f8fafc; }
         
+        /* Banners */
+        .alert-banner {
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            font-size: 0.95rem;
+            display: flex;
+            gap: 12px;
+            align-items: start;
+            line-height: 1.5;
+        }
         .conflict-banner {
             background: var(--warning-bg);
             border: 1px solid #fdba74;
             border-left: 5px solid var(--warning-text);
             color: #7c2d12;
-            padding: 15px;
-            border-radius: 6px;
-            margin-bottom: 25px;
-            font-size: 0.95rem;
             display: none;
-            gap: 10px;
-            align-items: start;
+        }
+        .savings-banner {
+            background: var(--money-bg);
+            border: 1px solid #6ee7b7;
+            border-left: 5px solid var(--money-text);
+            color: #064e3b;
+            display: none;
         }
 
         .model-card {
             background: white;
             border-radius: var(--radius);
             padding: 25px;
-            margin-bottom: 25px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+            box-shadow: var(--shadow-soft);
             border: 1px solid var(--border);
+            transition: transform 0.2s;
+        }
+        
+        /* Winner Highlight Styling */
+        .winner-card {
+            border: 2px solid var(--primary);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .winner-card::before {
+            content: "🏆 TOP MATCH";
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: var(--primary);
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            padding: 6px 14px;
+            border-bottom-left-radius: 12px;
+            z-index: 1;
         }
 
         /* Logo & Header */
         .model-header { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 15px; }
         .logo-circle {
-            width: 48px; height: 48px; border-radius: 50%;
+            width: 52px; height: 52px; border-radius: 50%;
             background: var(--text-main); color: white;
             display: flex; align-items: center; justify-content: center;
-            font-weight: bold; font-size: 1.2rem;
+            font-weight: 700; font-size: 1.3rem;
         }
-        .model-name-group h2 { margin: 0; font-size: 1.4rem; }
+        .model-name-group h2 { margin: 0; font-size: 1.4rem; font-weight: 700; }
         .model-badge {
-            font-size: 0.75rem; text-transform: uppercase; font-weight: bold;
-            padding: 4px 8px; border-radius: 4px; margin-top: 4px; display: inline-block;
+            font-size: 0.75rem; text-transform: uppercase; font-weight: 700;
+            padding: 4px 10px; border-radius: 6px; margin-top: 4px; display: inline-block;
         }
         .badge-premium { background: #e0e7ff; color: #3730a3; }
         .badge-free { background: #dcfce7; color: #166534; }
         .badge-value { background: #fef3c7; color: #92400e; }
 
         /* Card Content */
-        .info-row { margin-bottom: 12px; display: flex; gap: 10px; }
+        .info-row { margin-bottom: 14px; display: flex; gap: 10px; }
         .info-label { font-weight: 700; min-width: 90px; color: var(--text-light); font-size: 0.9rem; }
-        .info-text { color: var(--text-main); font-size: 0.95rem; }
+        .info-text { color: var(--text-main); font-size: 0.95rem; font-weight: 500; }
         .tradeoff-text { color: #b91c1c; font-size: 0.9rem; }
         
         /* Web Note */
         .web-note { 
             display: inline-flex; align-items: center; gap: 5px;
             background: #f0fdf4; color: #15803d; border: 1px solid #bbf7d0;
-            padding: 4px 8px; border-radius: 4px; font-size: 0.85rem; font-weight: 600; margin-top: 5px;
+            padding: 4px 10px; border-radius: 6px; font-size: 0.85rem; font-weight: 600; margin-top: 6px;
         }
 
         /* Prompt Box */
-        .prompt-section { background: #f8fafc; padding: 15px; border-radius: 8px; border: 1px solid var(--border); margin-top: 15px; }
+        .prompt-section { background: #f1f5f9; padding: 20px; border-radius: 10px; border: 1px solid var(--border); margin-top: 20px; }
         .prompt-code {
             font-family: "Courier New", monospace; font-size: 0.9rem; white-space: pre-wrap;
             color: #334155; max-height: 250px; overflow-y: auto; display: block;
         }
         .btn-copy {
             background: var(--text-main); color: white; border: none; padding: 8px 16px;
-            border-radius: 6px; font-size: 0.85rem; margin-top: 10px; cursor: pointer;
+            border-radius: 6px; font-size: 0.85rem; margin-top: 12px; cursor: pointer;
+            font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 600;
         }
 
         /* Tips Accordion */
-        .accordion { margin-top: 15px; }
+        .accordion { margin-top: 20px; }
         .accordion-btn {
-            background: none; border: none; color: var(--primary); font-weight: 600;
+            background: none; border: none; color: var(--primary); font-weight: 700;
             cursor: pointer; padding: 0; font-size: 0.9rem; text-align: left;
             display: flex; align-items: center; gap: 5px;
+            font-family: 'Plus Jakarta Sans', sans-serif;
         }
         .accordion-content {
             display: none; margin-top: 10px; padding: 15px;
-            background: #fffbeb; border-radius: 6px; font-size: 0.9rem; color: #92400e;
+            background: #fffbeb; border-radius: 8px; font-size: 0.9rem; color: #92400e; line-height: 1.6;
         }
         
         /* Calculation Explanation */
@@ -224,6 +290,7 @@
             max-width: 500px;
             margin-left: auto;
             margin-right: auto;
+            line-height: 1.6;
         }
 
         /* Footer */
@@ -233,14 +300,16 @@
         }
         .feedback-btn {
             color: var(--primary); text-decoration: underline; background: none; border: none;
-            cursor: pointer; font-size: 0.85rem; padding: 0;
+            cursor: pointer; font-size: 0.85rem; padding: 0; font-weight: 500;
         }
 
         /* Mobile tweaks */
         @media (max-width: 500px) {
             .container { border-radius: 0; box-shadow: none; }
-            header { padding: 25px 20px; }
+            header { padding: 30px 20px; }
             .nav-buttons { position: sticky; bottom: 0; background: white; padding: 15px 20px; margin-top: 20px; border-top: 1px solid #e2e8f0; z-index: 10; }
+            header h1 { font-size: 1.8rem; }
+            .option-card { padding: 15px; font-size: 0.95rem; }
         }
     </style>
 </head>
@@ -263,7 +332,13 @@
         </div>
 
     <div class="results-view" id="resultsView">
-        <div id="conflictMessage" class="conflict-banner">
+        
+        <div id="savingsMessage" class="alert-banner savings-banner">
+            <div style="font-size:1.2rem;">💰</div>
+            <div id="savingsText"></div>
+        </div>
+
+        <div id="conflictMessage" class="alert-banner conflict-banner">
             <div style="font-size:1.2rem;">⚠️</div>
             <div id="conflictText"></div>
         </div>
@@ -276,14 +351,14 @@
             and whether you need live web access.
         </div>
         
-        <div style="text-align: center; margin-top: 20px;">
+        <div style="text-align: center; margin-top: 30px;">
             <button onclick="location.reload()" class="btn-secondary">Start Over</button>
         </div>
     </div>
 </div>
 
 <div class="app-footer">
-    <p>Updated: January 2025. This tool suggests models based on general public benchmarks. Always verify results manually.</p>
+    <p>Updated: 2025. This tool suggests models based on general public benchmarks. Always verify results manually.</p>
     <p>Was this recommendation helpful? <a href="mailto:tejeshwar.19842009@gmail.com?subject=Pick Your AI Feedback" class="feedback-btn">Send Feedback</a></p>
 </div>
 
@@ -409,21 +484,32 @@ const MODELS = [
 ];
 
 /* =========================================
-   2. CONFIG: QUESTIONS
+   2. CONFIG: QUESTIONS (WITH ICONS)
    ========================================= */
 const QUESTIONS = [
+    {
+        id: "current_subscription",
+        text: "Do you currently pay for an AI subscription?",
+        type: "single",
+        options: [
+            { val: "none", label: "🚫 No, I use free tools" },
+            { val: "chatgpt_plus", label: "🤖 ChatGPT Plus ($20/mo)" },
+            { val: "claude_pro", label: "🧠 Claude Pro ($20/mo)" },
+            { val: "gemini_adv", label: "💎 Gemini Advanced ($20/mo)" }
+        ]
+    },
     {
         id: "task_type",
         text: "What do you want to do?",
         type: "single",
         options: [
-            { val: "write_rewrite", label: "Write or rewrite text (Email, Blog, Essay)" },
-            { val: "research", label: "Research & Fact-checking" },
-            { val: "analyze_docs", label: "Summarize long documents / PDFs" },
-            { val: "brainstorm_creative", label: "Brainstorm creative ideas" },
-            { val: "code_debug", label: "Write or Fix Code" },
-            { val: "images_media", label: "Analyze Images or Media" },
-            { val: "data_tables", label: "Analyze Data / Tables" }
+            { val: "write_rewrite", label: "✍️ Write or rewrite text" },
+            { val: "research", label: "🔎 Research & Fact-checking" },
+            { val: "analyze_docs", label: "📄 Summarize Documents / PDFs" },
+            { val: "brainstorm_creative", label: "💡 Brainstorm creative ideas" },
+            { val: "code_debug", label: "💻 Write or Fix Code" },
+            { val: "images_media", label: "🖼️ Analyze Images or Media" },
+            { val: "data_tables", label: "📊 Analyze Data / Tables" }
         ]
     },
     {
@@ -431,19 +517,19 @@ const QUESTIONS = [
         text: "What is most important for this result?",
         type: "single",
         options: [
-            { val: "accuracy", label: "Accuracy (I need facts/logic)" },
-            { val: "speed_cost", label: "Speed (I need it fast/cheap)" },
-            { val: "creativity", label: "Creativity (Surprise me)" },
-            { val: "tone_polish", label: "Human-like Tone (Polished writing)" }
+            { val: "accuracy", label: "🎯 Accuracy & Logic" },
+            { val: "speed_cost", label: "⚡ Speed & Low Cost" },
+            { val: "creativity", label: "🎨 Creativity & Ideas" },
+            { val: "tone_polish", label: "🎩 Human-like Tone" }
         ]
     },
     {
         id: "need_live_web",
-        text: "Do you need fresh information from the internet?", // FIXED: UX wording
+        text: "Do you need fresh information from the internet?",
         type: "single",
         options: [
-            { val: "yes", label: "Yes, I need breaking news / recent info" },
-            { val: "no", label: "No, general knowledge is fine" }
+            { val: "yes", label: "🌐 Yes, I need breaking info" },
+            { val: "no", label: "📚 No, general knowledge is fine" }
         ]
     },
     {
@@ -451,9 +537,9 @@ const QUESTIONS = [
         text: "How complex is this task?",
         type: "single",
         options: [
-            { val: "simple", label: "Simple (A quick question or paragraph)" },
-            { val: "medium", label: "Medium (A few steps involved)" },
-            { val: "complex", label: "Complex (Deep strategy, math, or logic)" }
+            { val: "simple", label: "🟢 Simple (Quick question)" },
+            { val: "medium", label: "🟡 Medium (A few steps)" },
+            { val: "complex", label: "🔴 Complex (Deep strategy/math)" }
         ]
     },
     {
@@ -461,11 +547,11 @@ const QUESTIONS = [
         text: "What will you give the AI to work with?",
         type: "multi",
         options: [
-            { val: "none", label: "None (Just text instructions)" },
-            { val: "long_docs", label: "Long Documents / PDFs" },
-            { val: "code", label: "Code Files" },
-            { val: "tables_data", label: "Excel / CSV Data" },
-            { val: "images", label: "Images / Screenshots" }
+            { val: "none", label: "💬 Just text instructions" },
+            { val: "long_docs", label: "📄 Long Documents / PDFs" },
+            { val: "code", label: "💻 Code Files" },
+            { val: "tables_data", label: "📊 Excel / CSV Data" },
+            { val: "images", label: "📸 Images / Screenshots" }
         ]
     },
     {
@@ -473,9 +559,9 @@ const QUESTIONS = [
         text: "Do you have budget constraints?",
         type: "single",
         options: [
-            { val: "no_special_constraint", label: "No specific constraints" },
-            { val: "must_be_free_or_cheap", label: "Must be Free or Very Cheap" },
-            { val: "prefer_open_source_self_host", label: "Prefer Open Source / Private" }
+            { val: "no_special_constraint", label: "🔓 No specific constraints" },
+            { val: "must_be_free_or_cheap", label: "💸 Must be Free or Cheap" },
+            { val: "prefer_open_source_self_host", label: "🛡️ Prefer Open Source" }
         ]
     }
 ];
@@ -627,7 +713,6 @@ function calculateResults() {
         addScore('qwen-2.5', 3, "Open source coding powerhouse");
         addScore('deepseek-r1', 3, "Math/Logic specialist");
         
-        // FIXED: Open Source Coding Boost
         if (ans.constraints === "prefer_open_source_self_host") {
             addScore("qwen-2.5", 4, "Open-source coding leader");
             addScore("deepseek-r1", 4, "Strong logic coding ability");
@@ -682,7 +767,6 @@ function calculateResults() {
         addScore('claude-3.7-haiku', 3, "Efficient for simple tasks");
         addScore('gemini-flash-lite', 3, "Micro cost");
         
-        // FIXED: Soft penalty for overpowering models
         addScore("gpt-4.1", -2, "Overkill for simple tasks");
         addScore("claude-3.7-sonnet", -2, "Overkill for simple tasks");
     }
@@ -735,10 +819,9 @@ function calculateResults() {
         });
     }
     
-    // FIXED: Neutralize Cost Penalty if "No Constraints"
+    // "No Constraints" - Neutralize cost penalties
     if (ans.constraints === 'no_special_constraint') {
-        // We do nothing. This ensures premium models are scored purely on capability 
-        // without arbitrary penalties or boosts related to cost.
+        // No action needed - scores reflect pure capability
     }
 
     // --- SCALING ---
@@ -771,6 +854,22 @@ function displayResults(topModels) {
     document.getElementById('wizardContent').style.display = 'none';
     document.getElementById('resultsView').style.display = 'block';
     
+    const rec = topModels[0];
+    const currentSub = userAnswers.current_subscription;
+    
+    // --- SAVINGS LOGIC ---
+    const savingsEl = document.getElementById('savingsMessage');
+    const savingsText = document.getElementById('savingsText');
+    let showSavings = false;
+
+    if (currentSub !== 'none') {
+        if (rec.tier === 'free' || rec.tier === 'low') {
+             savingsText.innerHTML = `<strong>Potential Savings:</strong> You currently pay for AI, but for this specific task, <strong>${rec.label}</strong> is capable enough and costs significantly less (or is free).`;
+             showSavings = true;
+        }
+    }
+    savingsEl.style.display = showSavings ? 'flex' : 'none';
+
     // --- CONFLICT CHECK ---
     const isComplex = userAnswers.complexity === 'complex';
     const isCheap = userAnswers.constraints === 'must_be_free_or_cheap';
@@ -818,8 +917,11 @@ function displayResults(topModels) {
             webNoteHtml = `<div class="web-note"><span>🌐</span> This model supports live web retrieval.</div>`;
         }
 
+        // Highlight First Result
+        const winnerClass = index === 0 ? 'winner-card' : '';
+
         const card = document.createElement('div');
-        card.className = 'model-card';
+        card.className = `model-card ${winnerClass}`;
         card.innerHTML = `
             <div class="model-header">
                 <div class="logo-circle">${initial}</div>
@@ -962,9 +1064,9 @@ QUESTIONS.push({
     text: "What is your experience level with AI prompts?",
     type: "single",
     options: [
-        { val: "beginner", label: "Beginner (I want a simple sentence)" },
-        { val: "intermediate", label: "Intermediate (I can tweak details)" },
-        { val: "advanced", label: "Advanced (I use structured prompts/JSON)" }
+        { val: "beginner", label: "🌱 Beginner (Simple sentence)" },
+        { val: "intermediate", label: "🌿 Intermediate (Can tweak details)" },
+        { val: "advanced", label: "🌳 Advanced (JSON/Structured)" }
     ]
 });
 
