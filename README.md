@@ -35,7 +35,7 @@ Most AI tools fall into two traps:
 
 **AI Model Picker** is different. It is the **Consumer Advocate** for AI.
 
-### ⚔️ Comparison: Us vs. The Rest
+### Comparison: Us vs. The Rest
 
 | Feature | 🏢 Corporate Lead Magnets (e.g. Wonderchat) | 📊 Developer Leaderboards | ✅ AI Model Picker (This Tool) |
 | :--- | :--- | :--- | :--- |
@@ -45,10 +45,10 @@ Most AI tools fall into two traps:
 | **Web Capability** | Rarely checks | N/A | **Distinguishes Online vs. Offline models** |
 | **Target User** | CTOs & Support Managers | ML Engineers | **Freelancers, Students, & You** |
 
-### 🛡️ Our Core Philosophy: Fighting "Subscription Fatigue"
+### Our Core Philosophy: Fighting "Subscription Fatigue"
 We believe you shouldn't pay monthly subscriptions for ChatGPT Plus if a free model (like Gemini Flash or GPT-4o mini) can handle your specific workload. This tool calculates the "Minimum Viable Model" for your task to keep your monthly recurring costs at 0.
 
-## 🛠️ How to Run Locally
+## How to Run Locally
 Since this project is a single file, running it is incredibly easy:
 
 1.  **Clone the repository:**
@@ -58,7 +58,7 @@ Since this project is a single file, running it is incredibly easy:
 2.  **Open the file:**
     Double-click `index.html` to open it in your web browser.
 
-## ⚙️ Configuration
+## Configuration
 You can easily add new models or change scoring rules by editing the `index.html` file directly.
 
 ### Adding a New Model
