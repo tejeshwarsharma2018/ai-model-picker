@@ -46,7 +46,7 @@ Most AI tools fall into two traps:
 | **Web Capability** | Rarely checks | N/A | **Distinguishes Online vs. Offline models** |
 | **Target User** | CTOs & Support Managers | ML Engineers | **Freelancers, Students, & You** |
 
-### Our Core Philosophy: Fighting "Subscription Fatigue"
+### Core Philosophy: Fighting "Subscription Fatigue"
 We believe you shouldn't pay monthly subscriptions for ChatGPT Plus if a free model (like Gemini Flash or GPT-4o mini) can handle your specific workload. This tool calculates the "Minimum Viable Model" for your task to keep your monthly recurring costs at 0.
 
 ## How to Run Locally
