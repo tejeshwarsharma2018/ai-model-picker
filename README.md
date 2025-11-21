@@ -27,6 +27,27 @@ While there are many "AI Model Leaderboards" and "Developer Benchmarks" out ther
 **The Core Problem Solved:**
 Most users blindly pay for multiple $20/month subscriptions (ChatGPT Plus, Claude Pro, etc.) without realizing that a free or cheaper model might handle their specific workflow (e.g., "summarizing PDFs") even better. This tool uses a weighted algorithm to find that "Goldilocks" model for your specific needs.
 
+## The "Goldilocks" Engine: Why This Exists
+
+Most AI tools fall into two traps:
+1.  **The "Enterprise Sales" Trap:** Tools like *Wonderchat* are designed to sell you a chatbot builder for your business. They don't care about your personal wallet.
+2.  **The "Developer Benchmark" Trap:** Leaderboards like *HuggingFace* rank models by abstract Python scores that don't mean much to an everyday user writing an email.
+
+**AI Model Picker** is different. It is the **Consumer Advocate** for AI.
+
+### ⚔️ Comparison: Us vs. The Rest
+
+| Feature | 🏢 Corporate Lead Magnets (e.g. Wonderchat) | 📊 Developer Leaderboards | ✅ AI Model Picker (This Tool) |
+| :--- | :--- | :--- | :--- |
+| **Primary Goal** | Sell you a B2B subscription | Rank raw computing power | **Save you money** |
+| **Cost Awareness** | Ignored | Ignored | **Core Feature** (Checks if you overpay) |
+| **Input Logic** | Basic (Text only) | N/A | **Deep** (PDFs, Code, Images, Web) |
+| **Web Capability** | Rarely checks | N/A | **Distinguishes Online vs. Offline models** |
+| **Target User** | CTOs & Support Managers | ML Engineers | **Freelancers, Students, & You** |
+
+### 🛡️ Our Core Philosophy: Fighting "Subscription Fatigue"
+We believe you shouldn't pay monthly subscriptions for ChatGPT Plus if a free model (like Gemini Flash or GPT-4o mini) can handle your specific workload. This tool calculates the "Minimum Viable Model" for your task to keep your monthly recurring costs at 0.
+
 ## 🛠️ How to Run Locally
 Since this project is a single file, running it is incredibly easy:
 
