@@ -49,6 +49,49 @@ Most AI tools fall into two traps:
 ### Core Philosophy: Fighting "Subscription Fatigue"
 We believe you shouldn't pay monthly subscriptions for ChatGPT Plus if a free model (like Gemini Flash or GPT-4o mini) can handle your specific workload. This tool calculates the "Minimum Viable Model" for your task to keep your monthly recurring costs at 0.
 
+## 🧭 Why Model Selection Still Matters
+
+Even as AI systems improve rapidly, two realities make model selection an essential skill for everyday users:
+
+### **1. AI models are becoming more different, not more similar**
+
+Although base training datasets overlap, every major AI lab is now integrating different forms of *specialized*, *exclusive*, or *partnership-driven* data:
+
+- Some models emphasize **reasoning and mathematics**  
+- Some excel in **creativity and storytelling**  
+- Some prioritize **low latency or cost efficiency**  
+- Some integrate **live web data** more deeply  
+- Some optimize for **privacy and self-hosting**  
+- Some receive **proprietary data partnerships** (forums, social platforms, etc.)
+
+Because of this, capabilities, hallucination patterns, styles, and strengths will continue to diverge.  
+Even if overall intelligence improves, **specialization and bias profiles will remain**, making it helpful to match the right model to the right task.
+
+### **2. The modern AI skill is “model routing”**
+
+A growing number of people are shifting from relying on a single AI model to distributing work across multiple models depending on strengths:
+
+- One model for **fast ideation**  
+- One for **complex reasoning**  
+- One for **creative writing**  
+- One for **web-connected research**  
+- One for **code generation or debugging**  
+- One for **private, local workflows**
+
+This mindset treats AI not as a single assistant, but as a *team of coworkers* — each with different talents.
+The benefit: you get better results while reducing unnecessary subscriptions and tool fatigue.
+
+### **Why this matters for this tool**
+
+This project is built on the belief that:
+
+- No single AI model will ever be the best at everything  
+- Model diversity (and specialization) is increasing, not shrinking  
+- Everyday users need simple, friendly guidance — *without* reading dozens of reviews or benchmark charts  
+- A lightweight, transparent decision helper can save money, time, and cognitive load  
+
+This section explains the underlying philosophy behind the tool and why it will remain relevant even as AI capabilities continue to evolve.
+
 ## How to Run Locally
 Since this project is a single file, running it is incredibly easy:
 
