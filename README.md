@@ -45,7 +45,7 @@ Most AI tools fall into two traps:
 | **Target User** | CTOs & Support Managers | ML Engineers | **Freelancers, Students, & You** |
 
 ### Core Philosophy: Fighting "Subscription Fatigue"
-We believe you shouldn't pay monthly subscriptions for ChatGPT Plus if a free model (like Gemini Flash or GPT-4o mini) can handle your specific workload. This simple tool calculates the "Minimum Viable Model" for your task to keep your monthly recurring costs at 0.
+We believe you shouldn't pay monthly subscriptions for ChatGPT Plus if a free model (like Gemini Flash or GPT-4o mini) can handle your specific workload. This simple tool calculates the "Minimum Viable Model" for your task to keep your monthly recurring costs low.
 
 ## Why Model Selection Still Matters
 
@@ -77,8 +77,7 @@ A growing number of people are shifting from relying on a single AI model to dis
 - One for **code generation or debugging**  
 - One for **private, local workflows**
 
-This mindset treats AI not as a single assistant, but as a *team of coworkers* — each with different talents.
-The benefit: you get better results while reducing unnecessary subscriptions fatigue.
+This mindset treats AI not as a single assistant, but as a *team of coworkers*, each with different talents.
 
 ### **Why this matters for this tool**
 
@@ -86,7 +85,7 @@ This project is built on the belief that:
 
 - No single AI model will ever be the best at everything.  
 - Model diversity (and specialization) is increasing, not shrinking.  
-- Everyday users need simple, friendly guidance — *without* reading dozens of reviews or benchmark charts.  
+- Everyday users need simple, friendly guidance, *without* reading dozens of reviews or benchmark charts.  
 - A lightweight, transparent decision helper can save money, time, and cognitive load.
 
 ## How to Run Locally
