@@ -78,7 +78,7 @@ A growing number of people are shifting from relying on a single AI model to dis
 - One for **private, local workflows**
 
 This mindset treats AI not as a single assistant, but as a *team of coworkers* — each with different talents.
-The benefit: you get better results while reducing unnecessary subscriptions and tool fatigue.
+The benefit: you get better results while reducing unnecessary subscriptions fatigue.
 
 ### **Why this matters for this tool**
 
@@ -90,7 +90,7 @@ This project is built on the belief that:
 - A lightweight, transparent decision helper can save money, time, and cognitive load.
 
 ## How to Run Locally
-Since this project is a single file, running it is incredibly easy:
+Running it is incredibly easy:
 
 1.  **Clone the repository:**
     ```bash
