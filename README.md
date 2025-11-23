@@ -1,44 +1,42 @@
 # AI Model Picker
 
-A smart, mobile-friendly web tool that helps users choose the best AI model for their specific needs. 
-
-Tool link: [AI Model Picker](https://tejeshwarsharma2018.github.io/ai-model-picker/)
+A mobile-friendly web tool that helps users choose the best AI model for their specific needs. 
 
 ## About
-The **AI Model Picker** is a single-file decision assistant designed for professionals, small teams, and non-technical users. Instead of guessing which model to use (GPT-4, Claude 3.5, Gemini, Llama 3, etc.), users answer 7 simple questions about their task, budget, and complexity.
+The **AI Model Picker** is a decision assistant designed for professionals, small teams, and non-technical users. Instead of guessing which model to use (GPT-4, Claude 3.5, Gemini, Llama 3, or others), users answer 7 simple questions about their task, budget, and complexity.
 
-The app uses a weighted scoring algorithm to recommend the top 2 models and provides a **tailored prompt** to get them started immediately.
+The app uses a weighted scoring system to recommend the top models and also provides a quick **tailored prompt** to get them started immediately.
 
 ## Features
-* **Smart Scoring Engine:** Ranks models based on task type, reasoning capability, speed, and cost.
+* **Scoring Engine:** Ranks models based on task type, reasoning capability, speed, and cost.
 * **Conflict Detection:** Warns users if their budget constraints conflict with their task complexity (e.g., "Complex reasoning" vs "Must be free").
-* **Web-Native Awareness:** Detects if a user needs live data and prioritizes models with internet access.
+* **Web-Native Awareness:** Considers if a user needs live data and prioritizes models with deep internet access.
 * **Prompt Generator:** Automatically generates a ready-to-use prompt based on the user's skill level (Beginner text vs. Advanced JSON).
-* **Zero Dependencies:** Built entirely in vanilla HTML, CSS, and JavaScript. No build steps, no frameworks, no backend required.
+* **Zero Dependencies:** Built entirely in HTML, CSS, and JavaScript. No build steps, no frameworks, no backend required.
 
 ## Why This Tool is Unique
-While there are many "AI Model Leaderboards" and "Developer Benchmarks" out there, **AI Model Picker** fills a specific gap for the everyday user:
+While there are many **AI Model Leaderboards** and **Developer Benchmarks** out there, **AI Model Picker** fills a specific gap for the everyday user:
 
-| Feature | ❌ Typical Leaderboards | ❌ Enterprise Cost Tools | ✅ AI Model Picker (This Tool) |
+| Feature | Typical Leaderboards | Enterprise Cost Tools | AI Model Picker (This Tool) |
 | :--- | :--- | :--- | :--- |
 | **Target Audience** | Developers & Engineers | CTOs & Finance Teams | **Individuals, Freelancers, Students** |
 | **Primary Metric** | Python Code / Benchmarks | Cloud API Spend | **Personal Monthly Budget** |
 | **Goal** | Technical Performance | Corporate Cost Cutting | **Avoiding "Subscription Fatigue"** |
 
 **The Core Problem Solved:**
-Most users blindly pay for multiple monthly subscriptions (ChatGPT Plus, Claude Pro, etc.) without realizing that a free or cheaper model might handle their specific workflow (e.g., "summarizing PDFs") even better. This tool uses a weighted algorithm to find that "Goldilocks" model for your specific needs.
+Most users blindly pay for multiple monthly subscriptions (ChatGPT Plus, Claude Pro, etc.) without realizing that a free or cheaper model might handle their specific workflow/ task (e.g., "summarizing PDFs") even better. This tool uses a weighted algorithm to find that "Goldilocks" model for your specific needs.
 
-## The "Goldilocks" Engine: Why This Exists
+## The "Goldilocks" Engine: Why This Tool Exists
 
 Most AI tools fall into two traps:
-1.  **The "Enterprise Sales" Trap:** Tools like *Wonderchat* are designed to sell you a chatbot builder for your business. They don't care about your personal wallet.
-2.  **The "Developer Benchmark" Trap:** Leaderboards like *HuggingFace* rank models by abstract Python scores that don't mean much to an everyday user writing an email.
+1.  **The "Enterprise Sales" Trap:** Tools like *Wonderchat* are designed to sell you a chatbot builder for your business. They don't inherently care about your personal wallet.
+2.  **The "Developer Benchmark" Trap:** Leaderboards like **HuggingFace** rank models by abstract Python scores that don't mean much to an everyday user writing an email.
 
 **AI Model Picker** is different. It is the **Consumer Advocate** for AI.
 
 ### Comparison: Us vs. The Rest
 
-| Feature | 🏢 Corporate Lead Magnets (e.g. Wonderchat) | 📊 Developer Leaderboards | ✅ AI Model Picker (This Tool) |
+| Feature | Corporate Lead Magnets | Developer Leaderboards | AI Model Picker (This Tool) |
 | :--- | :--- | :--- | :--- |
 | **Primary Goal** | Sell you a B2B subscription | Rank raw computing power | **Save you money** |
 | **Cost Awareness** | Ignored | Ignored | **Core Feature** (Checks if you overpay) |
@@ -47,7 +45,7 @@ Most AI tools fall into two traps:
 | **Target User** | CTOs & Support Managers | ML Engineers | **Freelancers, Students, & You** |
 
 ### Core Philosophy: Fighting "Subscription Fatigue"
-We believe you shouldn't pay monthly subscriptions for ChatGPT Plus if a free model (like Gemini Flash or GPT-4o mini) can handle your specific workload. This tool calculates the "Minimum Viable Model" for your task to keep your monthly recurring costs at 0.
+We believe you shouldn't pay monthly subscriptions for ChatGPT Plus if a free model (like Gemini Flash or GPT-4o mini) can handle your specific workload. This simple tool calculates the "Minimum Viable Model" for your task to keep your monthly recurring costs at 0.
 
 ## Why Model Selection Still Matters
 
@@ -57,14 +55,15 @@ Even as AI systems improve rapidly, two realities make model selection an essent
 
 Although base training datasets overlap, every major AI lab is now integrating different forms of *specialized*, *exclusive*, or *partnership-driven* data:
 
-- Some models emphasize **reasoning and mathematics**  
-- Some excel in **creativity and storytelling**  
-- Some prioritize **low latency or cost efficiency**  
-- Some integrate **live web data** more deeply  
-- Some optimize for **privacy and self-hosting**  
-- Some receive **proprietary data partnerships** (forums, social platforms, etc.)
+- Some models emphasize **reasoning and mathematics**. 
+- Some excel in **creativity and storytelling**.
+- Some prioritize **low latency or cost efficiency**. 
+- Some integrate **live web data** more deeply.  
+- Some optimize for **privacy and self-hosting**. 
+- Some receive **proprietary data partnerships** (forums, social platforms, etc.).
 
-Because of this, capabilities, hallucination patterns, styles, and strengths will continue to diverge.  
+Because of this, capabilities, hallucination patterns, styles, and strengths will continue to diverge.
+
 Even if overall intelligence improves, **specialization and bias profiles will remain**, making it helpful to match the right model to the right task.
 
 ### **2. The modern AI skill is “model routing”**
@@ -83,13 +82,11 @@ The benefit: you get better results while reducing unnecessary subscriptions and
 
 ### **Why this matters for this tool**
 
-This section explains the underlying philosophy behind the tool and why we believe, it will remain relevant even as AI capabilities continue to evolve.
-
 This project is built on the belief that:
 
-- No single AI model will ever be the best at everything  
-- Model diversity (and specialization) is increasing, not shrinking  
-- Everyday users need simple, friendly guidance — *without* reading dozens of reviews or benchmark charts  
+- No single AI model will ever be the best at everything.  
+- Model diversity (and specialization) is increasing, not shrinking.  
+- Everyday users need simple, friendly guidance — *without* reading dozens of reviews or benchmark charts.  
 - A lightweight, transparent decision helper can save money, time, and cognitive load.
 
 ## How to Run Locally
